@@ -38,7 +38,7 @@ Welcome to **ChefConnect**, a platform that connects local chefs with customers 
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-repo/chefconnect.git
+   git clone https://github.com/phuctran362003/chef-connect.git
    cd chefconnect
    ```
 
