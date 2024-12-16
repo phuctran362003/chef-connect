@@ -1,0 +1,6 @@
+@ChefConnect.API_HostAddress = http://localhost:5248
+
+GET {{ChefConnect.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

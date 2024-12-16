@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChefConnect.Domain", "ChefConnect.Domain\ChefConnect.Domain.csproj", "{E36BBB88-8D32-425C-9FA0-31C8B93530E3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChefConnect.Infrastructure", "ChefConnect.Infrastructure\ChefConnect.Infrastructure.csproj", "{D76B9254-ACF7-4AC2-A7A7-46BDC15A3FAF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChefConnect.Application", "ChefConnect.Application\ChefConnect.Application.csproj", "{36FE7D3E-50CE-4D17-A899-50C48BDF5E04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChefConnect.API", "ChefConnect.API\ChefConnect.API.csproj", "{E713AC01-09F6-4722-9593-5CBFF894D86E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E36BBB88-8D32-425C-9FA0-31C8B93530E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E36BBB88-8D32-425C-9FA0-31C8B93530E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E36BBB88-8D32-425C-9FA0-31C8B93530E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E36BBB88-8D32-425C-9FA0-31C8B93530E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D76B9254-ACF7-4AC2-A7A7-46BDC15A3FAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D76B9254-ACF7-4AC2-A7A7-46BDC15A3FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D76B9254-ACF7-4AC2-A7A7-46BDC15A3FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D76B9254-ACF7-4AC2-A7A7-46BDC15A3FAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36FE7D3E-50CE-4D17-A899-50C48BDF5E04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36FE7D3E-50CE-4D17-A899-50C48BDF5E04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36FE7D3E-50CE-4D17-A899-50C48BDF5E04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36FE7D3E-50CE-4D17-A899-50C48BDF5E04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E713AC01-09F6-4722-9593-5CBFF894D86E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E713AC01-09F6-4722-9593-5CBFF894D86E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E713AC01-09F6-4722-9593-5CBFF894D86E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E713AC01-09F6-4722-9593-5CBFF894D86E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {13867596-6531-4921-90B3-2B42174FCD7D}
+	EndGlobalSection
+EndGlobal
