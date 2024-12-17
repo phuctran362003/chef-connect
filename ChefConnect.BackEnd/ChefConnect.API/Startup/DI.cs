@@ -1,4 +1,6 @@
 ﻿using ChefConnect.Domain.Entities;
+using ChefConnect.Infrastructure.Interfaces;
+using ChefConnect.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChefConnect.API.Startup
@@ -52,6 +54,10 @@ namespace ChefConnect.API.Startup
             // Đăng ký các service khác nếu có
             // services.AddScoped<IService, ServiceImplementation>();
 
+            #endregion
+
+            #region Repositories
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             #endregion
         }
     }

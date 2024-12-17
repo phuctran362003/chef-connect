@@ -4,6 +4,9 @@ namespace ChefConnect.Domain.Entities
 {
     public class ChefConnectDbContext : DbContext
     {
+        public ChefConnectDbContext()
+        {
+        }
         public ChefConnectDbContext(DbContextOptions<ChefConnectDbContext> options) : base(options) { }
 
         // DbSets for tables
