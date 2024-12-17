@@ -1,4 +1,6 @@
-﻿namespace ChefConnect.Domain.Common
+﻿using ChefConnect.Domain.Common;
+
+namespace ChefConnect.API.Common
 {
     public class ApiResponse<T>
     {

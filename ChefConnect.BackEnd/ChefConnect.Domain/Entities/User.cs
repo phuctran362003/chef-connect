@@ -1,4 +1,5 @@
 ﻿using ChefConnect.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChefConnect.Domain.Entities
 {
@@ -8,6 +9,8 @@ namespace ChefConnect.Domain.Entities
         public string Email { get; set; }
         public string HashedPassword { get; set; }
         public int RoleId { get; set; }
+
+        [Column(TypeName = "nvarchar(50)")]
         public UserStatus Status { get; set; } = UserStatus.Active;
 
         public Role Role { get; set; }

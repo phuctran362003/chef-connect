@@ -1,4 +1,7 @@
-﻿using ChefConnect.Domain.Entities;
+﻿using ChefConnect.Application.Interfaces;
+using ChefConnect.Application.Services;
+using ChefConnect.Domain.Entities;
+using ChefConnect.Infrastructure;
 using ChefConnect.Infrastructure.Interfaces;
 using ChefConnect.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +12,12 @@ namespace ChefConnect.API.Startup
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
+
+            #region UnitOfWork
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            #endregion
+
             #region Controllers
 
             // Đăng ký Controllers
@@ -52,12 +61,17 @@ namespace ChefConnect.API.Startup
             #region Services
 
             // Đăng ký các service khác nếu có
-            // services.AddScoped<IService, ServiceImplementation>();
+            services.AddScoped<IUserService, UserService>();
+
 
             #endregion
 
             #region Repositories
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            services.AddScoped<IUserRepository, UserRepository>();
+
+
             #endregion
         }
     }
