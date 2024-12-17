@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ChefConnect.Infrastructure.DB.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChefConnect.Domain.Entities
 {
@@ -21,7 +22,15 @@ namespace ChefConnect.Domain.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region Entity Configurations
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            #endregion
+
+
+
             base.OnModelCreating(modelBuilder);
+
+
 
             // Explicitly map derived entities to separate tables (TPT strategy)
             modelBuilder.Entity<User>().ToTable("Users");

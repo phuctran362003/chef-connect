@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ChefConnect.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -212,6 +214,16 @@ namespace ChefConnect.Infrastructure.Migrations
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "CreatedAt", "Description", "Name", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8422), "Administrator role", "Admin", new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8424) },
+                    { 2, new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8426), "Chef role", "Chef", new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8426) },
+                    { 3, new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8427), "Customer role", "Customer", new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8428) }
                 });
 
             migrationBuilder.CreateIndex(

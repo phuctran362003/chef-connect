@@ -287,6 +287,32 @@ namespace ChefConnect.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8422),
+                            Description = "Administrator role",
+                            Name = "Admin",
+                            UpdatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8424)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8426),
+                            Description = "Chef role",
+                            Name = "Chef",
+                            UpdatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8426)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8427),
+                            Description = "Customer role",
+                            Name = "Customer",
+                            UpdatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8428)
+                        });
                 });
 
             modelBuilder.Entity("ChefConnect.Domain.Entities.User", b =>
