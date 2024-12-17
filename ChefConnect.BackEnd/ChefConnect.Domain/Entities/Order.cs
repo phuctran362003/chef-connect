@@ -1,11 +1,13 @@
-﻿namespace ChefConnect.Domain.Entities
+﻿using ChefConnect.Domain.Enums;
+
+namespace ChefConnect.Domain.Entities
 {
     public class Order : BaseEntity
     {
         public int UserId { get; set; }
         public int ChefId { get; set; }
-        public string Status { get; set; } = "pending";
-        public string PaymentStatus { get; set; } = "unpaid";
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
+        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Unpaid;
         public decimal TotalPrice { get; set; }
         public string Note { get; set; }
 

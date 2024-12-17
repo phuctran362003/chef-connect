@@ -39,7 +39,7 @@ namespace ChefConnect.Infrastructure.Migrations
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     HashedPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
@@ -87,7 +87,7 @@ namespace ChefConnect.Infrastructure.Migrations
                     ChefId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -110,8 +110,8 @@ namespace ChefConnect.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     ChefId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PaymentStatus = table.Column<int>(type: "int", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -145,7 +145,7 @@ namespace ChefConnect.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -169,7 +169,7 @@ namespace ChefConnect.Infrastructure.Migrations
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentStatus = table.Column<int>(type: "int", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -221,9 +221,9 @@ namespace ChefConnect.Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedAt", "Description", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8422), "Administrator role", "Admin", new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8424) },
-                    { 2, new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8426), "Chef role", "Chef", new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8426) },
-                    { 3, new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8427), "Customer role", "Customer", new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8428) }
+                    { 1, new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2918), "Administrator role", "Admin", new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2921) },
+                    { 2, new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2923), "Chef role", "Chef", new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2923) },
+                    { 3, new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2924), "Customer role", "Customer", new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2924) }
                 });
 
             migrationBuilder.CreateIndex(

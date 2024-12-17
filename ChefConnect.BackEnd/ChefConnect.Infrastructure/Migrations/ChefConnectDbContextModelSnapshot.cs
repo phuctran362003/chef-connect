@@ -87,9 +87,8 @@ namespace ChefConnect.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -119,9 +118,8 @@ namespace ChefConnect.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -155,13 +153,11 @@ namespace ChefConnect.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
@@ -241,9 +237,8 @@ namespace ChefConnect.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("TransactionId")
                         .IsRequired()
@@ -292,26 +287,26 @@ namespace ChefConnect.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8422),
+                            CreatedAt = new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2918),
                             Description = "Administrator role",
                             Name = "Admin",
-                            UpdatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8424)
+                            UpdatedAt = new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2921)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8426),
+                            CreatedAt = new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2923),
                             Description = "Chef role",
                             Name = "Chef",
-                            UpdatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8426)
+                            UpdatedAt = new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2923)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8427),
+                            CreatedAt = new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2924),
                             Description = "Customer role",
                             Name = "Customer",
-                            UpdatedAt = new DateTime(2024, 12, 17, 7, 3, 31, 397, DateTimeKind.Utc).AddTicks(8428)
+                            UpdatedAt = new DateTime(2024, 12, 17, 7, 14, 57, 6, DateTimeKind.Utc).AddTicks(2924)
                         });
                 });
 
@@ -339,9 +334,8 @@ namespace ChefConnect.Infrastructure.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()

@@ -1,4 +1,6 @@
-﻿namespace ChefConnect.Domain.Entities
+﻿using ChefConnect.Domain.Enums;
+
+namespace ChefConnect.Domain.Entities
 {
     public class Dish : BaseEntity
     {
@@ -7,7 +9,7 @@
         public string Description { get; set; }
         public decimal Price { get; set; }
         public string ImageUrl { get; set; }
-        public string Status { get; set; } = "available";
+        public DishStatus Status { get; set; } = DishStatus.Available;
 
         public Menu Menu { get; set; }
     }
