@@ -4,6 +4,7 @@ using ChefConnect.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChefConnect.Infrastructure.Migrations
 {
     [DbContext(typeof(ChefConnectDbContext))]
-    partial class ChefConnectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241217124826_fix-enumToString")]
+    partial class fixenumToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,9 +90,8 @@ namespace ChefConnect.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -119,9 +121,8 @@ namespace ChefConnect.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -155,13 +156,11 @@ namespace ChefConnect.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
@@ -241,9 +240,8 @@ namespace ChefConnect.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("TransactionId")
                         .IsRequired()
@@ -292,26 +290,26 @@ namespace ChefConnect.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 12, 17, 12, 51, 43, 984, DateTimeKind.Utc).AddTicks(3026),
+                            CreatedAt = new DateTime(2024, 12, 17, 12, 48, 24, 599, DateTimeKind.Utc).AddTicks(3533),
                             Description = "Administrator role",
                             Name = "Admin",
-                            UpdatedAt = new DateTime(2024, 12, 17, 12, 51, 43, 984, DateTimeKind.Utc).AddTicks(3030)
+                            UpdatedAt = new DateTime(2024, 12, 17, 12, 48, 24, 599, DateTimeKind.Utc).AddTicks(3536)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 12, 17, 12, 51, 43, 984, DateTimeKind.Utc).AddTicks(3032),
+                            CreatedAt = new DateTime(2024, 12, 17, 12, 48, 24, 599, DateTimeKind.Utc).AddTicks(3538),
                             Description = "Chef role",
                             Name = "Chef",
-                            UpdatedAt = new DateTime(2024, 12, 17, 12, 51, 43, 984, DateTimeKind.Utc).AddTicks(3033)
+                            UpdatedAt = new DateTime(2024, 12, 17, 12, 48, 24, 599, DateTimeKind.Utc).AddTicks(3538)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 12, 17, 12, 51, 43, 984, DateTimeKind.Utc).AddTicks(3034),
+                            CreatedAt = new DateTime(2024, 12, 17, 12, 48, 24, 599, DateTimeKind.Utc).AddTicks(3539),
                             Description = "Customer role",
                             Name = "Customer",
-                            UpdatedAt = new DateTime(2024, 12, 17, 12, 51, 43, 984, DateTimeKind.Utc).AddTicks(3035)
+                            UpdatedAt = new DateTime(2024, 12, 17, 12, 48, 24, 599, DateTimeKind.Utc).AddTicks(3540)
                         });
                 });
 

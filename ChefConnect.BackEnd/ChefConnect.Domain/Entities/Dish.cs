@@ -1,4 +1,5 @@
 ﻿using ChefConnect.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChefConnect.Domain.Entities
 {
@@ -9,6 +10,7 @@ namespace ChefConnect.Domain.Entities
         public string Description { get; set; }
         public decimal Price { get; set; }
         public string ImageUrl { get; set; }
+        [Column(TypeName = "nvarchar(50)")]
         public DishStatus Status { get; set; } = DishStatus.Available;
 
         public Menu Menu { get; set; }
