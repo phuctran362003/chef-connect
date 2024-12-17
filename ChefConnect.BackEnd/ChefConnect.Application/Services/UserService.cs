@@ -1,4 +1,5 @@
-﻿using ChefConnect.Application.Interfaces;
+﻿using ChefConnect.Application.DTOs.User;
+using ChefConnect.Application.Interfaces;
 using ChefConnect.Domain.Common;
 using ChefConnect.Domain.Entities;
 using ChefConnect.Domain.Enums;
@@ -15,18 +16,16 @@ namespace ChefConnect.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ServiceResponse<User>> RegisterForCustomerAsync(string username, string email, string password)
+        public async Task<ServiceResponse<UserDTO>> RegisterForCustomerAsync(string username, string email, string password)
         {
             try
             {
-                // Check for existing email or username
                 if (await _unitOfWork.UserRepository.IsEmailExistsAsync(email))
-                    return new ServiceResponse<User>("Email already exists.");
+                    return new ServiceResponse<UserDTO>("Email already exists.");
 
                 if (await _unitOfWork.UserRepository.IsUsernameExistsAsync(username))
-                    return new ServiceResponse<User>("Username already exists.");
+                    return new ServiceResponse<UserDTO>("Username already exists.");
 
-                // Create the user object with RoleId = 3 (Customer role)
                 var newUser = new User
                 {
                     Username = username,
@@ -35,18 +34,21 @@ namespace ChefConnect.Application.Services
                     Status = UserStatus.Active
                 };
 
-                // Register the user
                 var registeredUser = await _unitOfWork.UserRepository.RegisterUserAsync(newUser, password);
-
-                // Save the transaction
                 await _unitOfWork.SaveChangesAsync();
 
-                return new ServiceResponse<User>(registeredUser, "Customer registered successfully.");
+                // Map to UserDTO
+                var userDTO = new UserDTO
+                {
+                    Username = registeredUser.Username,
+                    Email = registeredUser.Email
+                };
+
+                return new ServiceResponse<UserDTO>(userDTO, "Customer registered successfully.");
             }
             catch (Exception ex)
             {
-                // Return failure response with error details
-                return new ServiceResponse<User>($"An error occurred: {ex.Message}");
+                return new ServiceResponse<UserDTO>($"An error occurred: {ex.Message}");
             }
         }
     }

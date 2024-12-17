@@ -1,10 +1,10 @@
-﻿using ChefConnect.Domain.Common;
-using ChefConnect.Domain.Entities;
+﻿using ChefConnect.Application.DTOs.User;
+using ChefConnect.Domain.Common;
 
 namespace ChefConnect.Application.Interfaces
 {
     public interface IUserService
     {
-        Task<ServiceResponse<User>> RegisterForCustomerAsync(string username, string email, string password);
+        Task<ServiceResponse<UserDTO>> RegisterForCustomerAsync(string username, string email, string password);
     }
 }

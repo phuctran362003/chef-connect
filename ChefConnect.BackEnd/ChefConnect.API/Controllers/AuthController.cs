@@ -1,7 +1,7 @@
 ﻿using ChefConnect.API.Common;
+using ChefConnect.Application.DTOs.User;
 using ChefConnect.Application.Interfaces;
 using ChefConnect.Domain.Common;
-using ChefConnect.Domain.Entities;
 using ChefConnect.Infrastructure.DTOs.User.Register;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,12 +29,12 @@ namespace ChefConnect.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse<string>(new ServiceResponse<string>("Invalid input data.")));
 
-            var serviceResponse = await _userService.RegisterForCustomerAsync(request.Username, request.Email, request.Password);
+            var response = await _userService.RegisterForCustomerAsync(request.Username, request.Email, request.Password);
 
-            if (!serviceResponse.IsSuccess)
-                return BadRequest(new ApiResponse<User>(serviceResponse));
+            if (!response.IsSuccess)
+                return BadRequest(new ApiResponse<UserDTO>(response));
 
-            return Ok(new ApiResponse<User>(serviceResponse));
+            return Ok(new ApiResponse<UserDTO>(response));
         }
     }
 }
