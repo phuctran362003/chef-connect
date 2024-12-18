@@ -17,6 +17,13 @@ namespace ChefConnect.Infrastructure.Repositories
 
 
 
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+        }
+
+
+        //authentication
         public async Task<User> RegisterUserAsync(User user, string password)
         {
             // Check if email or username already exists
