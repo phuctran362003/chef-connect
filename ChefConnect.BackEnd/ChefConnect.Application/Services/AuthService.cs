@@ -1,5 +1,5 @@
-﻿using ChefConnect.Application.Common;
-using ChefConnect.Application.DTOs.User;
+﻿using ChefConnect.Application.DTOs.User;
+using ChefConnect.Application.DTOs.User.Authentication;
 using ChefConnect.Application.Interfaces;
 using ChefConnect.Domain.Common;
 using ChefConnect.Domain.Entities;
@@ -9,7 +9,6 @@ using ChefConnect.Infrastructure.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
-
 using System.Text;
 
 namespace ChefConnect.Application.Services
@@ -19,50 +18,14 @@ namespace ChefConnect.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
-        private readonly IPasswordHasher _passwordHasher;
 
 
 
-        public AuthService(IUnitOfWork unitOfWork, IConfiguration configuration, ILogger<AuthService> logger, IPasswordHasher passwordHasher)
+        public AuthService(IUnitOfWork unitOfWork, IConfiguration configuration, ILogger<AuthService> logger)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
             _logger = logger;
-            _passwordHasher = passwordHasher;
-        }
-
-        public async Task<ServiceResponse<TokenResponse>> LoginAsync(string email, string password)
-        {
-            try
-            {
-                var user = await _unitOfWork.UserRepository.GetByEmailAsync(email);
-                if (user == null)
-                {
-                    _logger.LogWarning("No user found with email: {Email}", email);
-                    return new ServiceResponse<TokenResponse>("Invalid email or password.");
-                }
-
-                // Generate tokens
-                _logger.LogDebug("Generating access token for user: {UserId}", user.Id);
-                var jwtGenerator = new JwtTokenGenerator(_configuration);
-                var accessToken = jwtGenerator.GenerateAccessToken(user);
-                _logger.LogDebug("Access Token: {AccessToken}", accessToken);
-                var refreshToken = jwtGenerator.GenerateRefreshToken();
-
-                var tokenResponse = new TokenResponse
-                {
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken
-                };
-
-                _logger.LogInformation("User {Email} logged in successfully.", email);
-                return new ServiceResponse<TokenResponse>(tokenResponse, "Login successful.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred during login for email: {Email}", email);
-                return new ServiceResponse<TokenResponse>($"An error occurred: {ex.Message}");
-            }
         }
         public async Task<ServiceResponse<UserDTO>> RegisterForCustomerAsync(string username, string email, string password)
         {
@@ -103,33 +66,68 @@ namespace ChefConnect.Application.Services
             }
         }
 
-
-
-
-
-        private bool VerifyPassword(string inputPassword, string storedHashedPassword)
+        public async Task<ServiceResponse<LoginResponse>> LoginAsync(LoginRequest loginRequest)
         {
             try
             {
-                using (SHA256 sha256 = SHA256.Create())
+                // Validate input
+                if (string.IsNullOrWhiteSpace(loginRequest.Email) || string.IsNullOrWhiteSpace(loginRequest.Password))
+                    return new ServiceResponse<LoginResponse>("Email and Password are required.");
+
+                // Hash the provided password
+                var hashedPassword = HashPassword(loginRequest.Password);
+
+                // Retrieve user by email and hashed password
+                var user = await _unitOfWork.UserRepository.GetByEmailAndPasswordAsync(loginRequest.Email, hashedPassword);
+
+                if (user == null)
+                    return new ServiceResponse<LoginResponse>("Invalid email or password.");
+
+                // Generate JWT tokens
+                var tokenGenerator = new JwtTokenGenerator(_configuration);
+                var accessToken = tokenGenerator.GenerateAccessToken(user);
+                var refreshToken = tokenGenerator.GenerateRefreshToken();
+
+
+
+                // Create login response
+                var loginResponse = new LoginResponse
                 {
-                    byte[] inputBytes = Encoding.UTF8.GetBytes(inputPassword);
-                    byte[] hashedBytes = sha256.ComputeHash(inputBytes);
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    UserId = user.Id,
+                    Username = user.Username,
+                    Email = user.Email,
+                    Role = user.RoleId.ToString()
+                };
 
-                    string hashedInputPassword = Convert.ToBase64String(hashedBytes);
-
-                    // Log for debugging purposes
-                    _logger.LogDebug("Input Password Hash: {HashedInputPassword}", hashedInputPassword);
-
-                    return hashedInputPassword == storedHashedPassword;
-                }
+                return new ServiceResponse<LoginResponse>(loginResponse, "Login successful.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error in VerifyPassword");
-                return false;
+                return new ServiceResponse<LoginResponse>($"An error occurred during login: {ex.Message}");
             }
         }
+
+
+        // Helper function to hash password
+        private string HashPassword(string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return Convert.ToBase64String(bytes);
+            }
+        }
+
+
+
+
+
+
+
+
+
 
     }
 }

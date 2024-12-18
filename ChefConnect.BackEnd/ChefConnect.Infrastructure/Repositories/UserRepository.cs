@@ -13,10 +13,11 @@ namespace ChefConnect.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<User> GetByEmailAsync(string email)
+        public async Task<User> GetByEmailAndPasswordAsync(string email, string hashedPassword)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.HashedPassword == hashedPassword);
         }
+
 
         // Authentication
         public async Task<User> AddAsync(User user)

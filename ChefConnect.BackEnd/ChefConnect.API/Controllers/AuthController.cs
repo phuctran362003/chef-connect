@@ -1,7 +1,7 @@
 ﻿using ChefConnect.API.Common;
 using ChefConnect.Application.Common;
 using ChefConnect.Application.DTOs.User;
-using ChefConnect.Application.DTOs.User.RegisterUser;
+using ChefConnect.Application.DTOs.User.Authentication;
 using ChefConnect.Application.Interfaces;
 using ChefConnect.Domain.Common;
 using ChefConnect.Infrastructure.DTOs.User.Register;
@@ -30,7 +30,7 @@ namespace ChefConnect.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse<string>(new ServiceResponse<string>("Invalid input data.")));
 
-            var response = await _authService.LoginAsync(request.Email, request.Password);
+            var response = await _authService.LoginAsync(request);
 
             if (!response.IsSuccess)
                 return Unauthorized(new ApiResponse<TokenResponse>(response));
@@ -39,11 +39,7 @@ namespace ChefConnect.API.Controllers
         }
 
 
-        /// <summary>
-        /// Register a new customer account.
-        /// </summary>
-        /// <param name="request">Customer registration details</param>
-        /// <returns>ApiResponse with registration status</returns>
+
         [HttpPost("register")]
         public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerRequest request)
         {
