@@ -1,8 +1,6 @@
 ﻿using ChefConnect.Domain.Entities;
 using ChefConnect.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace ChefConnect.Infrastructure.Repositories
 {
@@ -15,16 +13,13 @@ namespace ChefConnect.Infrastructure.Repositories
             _context = context;
         }
 
-
-
         public async Task<User> GetByEmailAsync(string email)
         {
-            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-
-        //authentication
-        public async Task<User> RegisterUserAsync(User user, string password)
+        // Authentication
+        public async Task<User> AddAsync(User user)
         {
             // Check if email or username already exists
             if (await IsEmailExistsAsync(user.Email))
@@ -32,9 +27,6 @@ namespace ChefConnect.Infrastructure.Repositories
 
             if (await IsUsernameExistsAsync(user.Username))
                 throw new Exception("Username already exists.");
-
-            // Hash the password before storing it
-            user.HashedPassword = HashPassword(password);
 
             // Add user to the database
             await _context.Users.AddAsync(user);
@@ -52,20 +44,6 @@ namespace ChefConnect.Infrastructure.Repositories
         {
             return await _context.Users.AnyAsync(u => u.Username == username);
         }
-
-        private string HashPassword(string password)
-        {
-            // Use SHA256 for password hashing
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                StringBuilder builder = new StringBuilder();
-                foreach (byte b in bytes)
-                {
-                    builder.Append(b.ToString("x2"));
-                }
-                return builder.ToString();
-            }
-        }
     }
+
 }

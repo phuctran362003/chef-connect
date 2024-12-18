@@ -4,6 +4,7 @@ using ChefConnect.Domain.Entities;
 using ChefConnect.Infrastructure;
 using ChefConnect.Infrastructure.Interfaces;
 using ChefConnect.Infrastructure.Repositories;
+using ChefConnect.Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChefConnect.API.Startup
@@ -62,6 +63,8 @@ namespace ChefConnect.API.Startup
 
             // Đăng ký các service khác nếu có
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 
             #endregion

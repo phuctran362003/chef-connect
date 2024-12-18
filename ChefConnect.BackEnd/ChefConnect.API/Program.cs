@@ -9,6 +9,8 @@ builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddLogging();
+
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>

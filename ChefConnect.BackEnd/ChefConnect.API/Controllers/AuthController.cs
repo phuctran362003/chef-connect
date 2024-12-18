@@ -1,10 +1,10 @@
 ﻿using ChefConnect.API.Common;
 using ChefConnect.Application.Common;
 using ChefConnect.Application.DTOs.User;
+using ChefConnect.Application.DTOs.User.RegisterUser;
 using ChefConnect.Application.Interfaces;
 using ChefConnect.Domain.Common;
 using ChefConnect.Infrastructure.DTOs.User.Register;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChefConnect.API.Controllers
@@ -13,12 +13,13 @@ namespace ChefConnect.API.Controllers
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IUserService userService, ILogger<AuthController> logger)
+        public AuthController(IAuthService authService
+            , ILogger<AuthController> logger)
         {
-            _userService = userService;
+            _authService = authService;
             _logger = logger;
         }
 
@@ -29,7 +30,7 @@ namespace ChefConnect.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse<string>(new ServiceResponse<string>("Invalid input data.")));
 
-            var response = await _userService.LoginAsync(request.Email, request.Password);
+            var response = await _authService.LoginAsync(request.Email, request.Password);
 
             if (!response.IsSuccess)
                 return Unauthorized(new ApiResponse<TokenResponse>(response));
@@ -43,7 +44,7 @@ namespace ChefConnect.API.Controllers
         /// </summary>
         /// <param name="request">Customer registration details</param>
         /// <returns>ApiResponse with registration status</returns>
-        [HttpPost("customers")]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerRequest request)
         {
             try
@@ -51,7 +52,7 @@ namespace ChefConnect.API.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(new ApiResponse<string>(new ServiceResponse<string>("Invalid input data.")));
 
-                var response = await _userService.RegisterForCustomerAsync(request.Username, request.Email, request.Password);
+                var response = await _authService.RegisterForCustomerAsync(request.Username, request.Email, request.Password);
 
                 if (!response.IsSuccess)
                     return BadRequest(new ApiResponse<UserDTO>(response));
