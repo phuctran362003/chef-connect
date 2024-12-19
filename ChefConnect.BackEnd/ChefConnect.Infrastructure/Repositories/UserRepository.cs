@@ -13,38 +13,38 @@ namespace ChefConnect.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<User> GetByEmailAndPasswordAsync(string email, string hashedPassword)
+        // Method to handle user sign-up
+        public async Task<User> CreateUserAsync(User newUser)
+        {
+            // Add user to the database
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+            return newUser;
+        }
+
+        // Method to handle user sign-in
+        public async Task<User> GetUserByEmailAndPasswordAsync(string email, string hashedPassword)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.HashedPassword == hashedPassword);
         }
 
-
-        // Authentication
-        public async Task<User> AddAsync(User user)
+        public async Task<User> GetUserByEmailOrUsernameAsync(string emailOrUsername, string hashedPassword)
         {
-            // Check if email or username already exists
-            if (await IsEmailExistsAsync(user.Email))
-                throw new Exception("Email already exists.");
-
-            if (await IsUsernameExistsAsync(user.Username))
-                throw new Exception("Username already exists.");
-
-            // Add user to the database
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-
-            return user;
+            return await _context.Users.FirstOrDefaultAsync(u =>
+                (u.Email == emailOrUsername || u.Username == emailOrUsername) &&
+                u.HashedPassword == hashedPassword);
         }
 
-        public async Task<bool> IsEmailExistsAsync(string email)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.AnyAsync(u => u.Email == email);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<bool> IsUsernameExistsAsync(string username)
-        {
-            return await _context.Users.AnyAsync(u => u.Username == username);
-        }
+
+
+
+
+
     }
 
 }

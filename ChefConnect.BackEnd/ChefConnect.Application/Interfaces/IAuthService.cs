@@ -1,12 +1,12 @@
-﻿using ChefConnect.Application.DTOs.User;
-using ChefConnect.Application.DTOs.User.Authentication;
-using ChefConnect.Domain.Common;
+﻿using ChefConnect.Application.Common.Response;
+using ChefConnect.Application.DTOs.User.Request;
+using ChefConnect.Application.DTOs.User.Response;
 
 namespace ChefConnect.Application.Interfaces
 {
     public interface IAuthService
     {
-        Task<ServiceResponse<LoginResponse>> LoginAsync(LoginRequest loginRequest);
-        Task<ServiceResponse<UserDTO>> RegisterForCustomerAsync(string username, string email, string password);
+        Task<ServiceResponse<TokenResponse>> SignInAsync(SignInRequest request);
+        Task<ServiceResponse<SignUpResponse>> SignUpAsync(SignUpRequest request);
     }
 }

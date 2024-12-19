@@ -1,4 +1,4 @@
-﻿namespace ChefConnect.Application.Common
+﻿namespace ChefConnect.Application.Common.Response
 {
     public class TokenResponse
     {

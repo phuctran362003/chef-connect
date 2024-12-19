@@ -1,4 +1,4 @@
-﻿namespace ChefConnect.Domain.Common
+﻿namespace ChefConnect.Application.Common.Response
 {
     public class ServiceResponse<T>
     {

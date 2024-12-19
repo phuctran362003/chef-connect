@@ -4,9 +4,11 @@ namespace ChefConnect.Infrastructure.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User> GetByEmailAndPasswordAsync(string email, string hashedPassword);
-        Task<User> AddAsync(User user);
-        Task<bool> IsEmailExistsAsync(string email);
-        Task<bool> IsUsernameExistsAsync(string username);
+        Task<User> CreateUserAsync(User newUser);
+        Task<User> GetUserByEmailAndPasswordAsync(string email, string hashedPassword);
+        Task<User> GetUserByEmailOrUsernameAsync(string emailOrUsername, string hashedPassword);
+        Task<User> GetUserByEmailAsync(string email);
+
+
     }
 }

@@ -1,15 +1,13 @@
-﻿using ChefConnect.Application.DTOs.User;
-using ChefConnect.Application.DTOs.User.Authentication;
+﻿using ChefConnect.Application.Common.Response;
+using ChefConnect.Application.DTOs.User.Request;
+using ChefConnect.Application.DTOs.User.Response;
 using ChefConnect.Application.Interfaces;
-using ChefConnect.Domain.Common;
 using ChefConnect.Domain.Entities;
 using ChefConnect.Domain.Enums;
 using ChefConnect.Infrastructure.Interfaces;
 using ChefConnect.Infrastructure.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace ChefConnect.Application.Services
 {
@@ -19,115 +17,144 @@ namespace ChefConnect.Application.Services
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
 
-
-
         public AuthService(IUnitOfWork unitOfWork, IConfiguration configuration, ILogger<AuthService> logger)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
             _logger = logger;
         }
-        public async Task<ServiceResponse<UserDTO>> RegisterForCustomerAsync(string username, string email, string password)
+
+
+        //đăng kí
+        public async Task<ServiceResponse<SignUpResponse>> SignUpAsync(SignUpRequest request)
         {
-            try
-            {
-                if (await _unitOfWork.UserRepository.IsEmailExistsAsync(email))
-                    return new ServiceResponse<UserDTO>("Email already exists.");
+            _logger.LogInformation("SignUpAsync called with email: {Email}", request.Email);
 
-                if (await _unitOfWork.UserRepository.IsUsernameExistsAsync(username))
-                    return new ServiceResponse<UserDTO>("Username already exists.");
-
-                var hashedPassword = _passwordHasher.HashPassword(password);
-
-                var newUser = new User
-                {
-                    Username = username,
-                    Email = email,
-                    HashedPassword = hashedPassword,
-                    RoleId = 3, // Customer role
-                    Status = UserStatus.Active
-                };
-
-                var registeredUser = await _unitOfWork.UserRepository.AddAsync(newUser);
-                await _unitOfWork.SaveChangesAsync();
-
-                // Map to UserDTO
-                var userDTO = new UserDTO
-                {
-                    Username = registeredUser.Username,
-                    Email = registeredUser.Email
-                };
-
-                return new ServiceResponse<UserDTO>(userDTO, "Customer registered successfully.");
-            }
-            catch (Exception ex)
-            {
-                return new ServiceResponse<UserDTO>($"An error occurred: {ex.Message}");
-            }
-        }
-
-        public async Task<ServiceResponse<LoginResponse>> LoginAsync(LoginRequest loginRequest)
-        {
             try
             {
                 // Validate input
-                if (string.IsNullOrWhiteSpace(loginRequest.Email) || string.IsNullOrWhiteSpace(loginRequest.Password))
-                    return new ServiceResponse<LoginResponse>("Email and Password are required.");
+                if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.Username))
+                {
+                    _logger.LogWarning("Invalid sign-up request: {Request}", request);
+                    return new ServiceResponse<SignUpResponse>("Invalid input data.");
+                }
+
+                // Check if a user with the email already exists
+                var existingUser = await _unitOfWork.UserRepository.GetUserByEmailAsync(request.Email);
+                if (existingUser != null)
+                {
+                    _logger.LogWarning("Sign-up attempt with existing email: {Email}", request.Email);
+                    return new ServiceResponse<SignUpResponse>("User with this email already exists.");
+                }
+
+                // Hash the password before saving
+                var hashedPassword = HashPassword(request.Password);
+
+                // Create a new user object
+                var newUser = new User
+                {
+                    Username = request.Username,
+                    Email = request.Email,
+                    HashedPassword = hashedPassword,
+                    RoleId = 2, // Default role (e.g., "User")
+                    Status = UserStatus.Active
+                };
+
+                var createdUser = await _unitOfWork.UserRepository.CreateUserAsync(newUser);
+                _logger.LogInformation("New user created: {Username}, {Email}", createdUser.Username, createdUser.Email);
+
+                // Prepare the response
+                var response = new SignUpResponse
+                {
+                    Username = createdUser.Username,
+                    Email = createdUser.Email,
+                    Message = "User signed up successfully."
+                };
+
+                return new ServiceResponse<SignUpResponse>(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during SignUpAsync for email: {Email}", request.Email);
+                return new ServiceResponse<SignUpResponse>("An error occurred during sign-up.");
+            }
+        }
+
+        //đăng nhập
+        public async Task<ServiceResponse<TokenResponse>> SignInAsync(SignInRequest request)
+        {
+            _logger.LogInformation("SignInAsync called for email/username: {EmailOrUsername}", request.EmailOrUsername);
+
+            try
+            {
+                // Validate input
+                if (string.IsNullOrWhiteSpace(request.EmailOrUsername) || string.IsNullOrWhiteSpace(request.Password))
+                {
+                    _logger.LogWarning("Invalid sign-in request: {Request}", request);
+                    return new ServiceResponse<TokenResponse>("Invalid input data.");
+                }
 
                 // Hash the provided password
-                var hashedPassword = HashPassword(loginRequest.Password);
+                var hashedPassword = HashPassword(request.Password);
 
-                // Retrieve user by email and hashed password
-                var user = await _unitOfWork.UserRepository.GetByEmailAndPasswordAsync(loginRequest.Email, hashedPassword);
-
+                // Check for user by email or username
+                var user = await _unitOfWork.UserRepository.GetUserByEmailOrUsernameAsync(request.EmailOrUsername, hashedPassword);
                 if (user == null)
-                    return new ServiceResponse<LoginResponse>("Invalid email or password.");
+                {
+                    _logger.LogWarning("Invalid sign-in attempt for email/username: {EmailOrUsername}", request.EmailOrUsername);
+                    return new ServiceResponse<TokenResponse>("Invalid email/username or password.");
+                }
 
-                // Generate JWT tokens
+                // Check if the user's account is active
+                if (user.Status != UserStatus.Active)
+                {
+                    _logger.LogWarning("Inactive account sign-in attempt for email/username: {EmailOrUsername}", request.EmailOrUsername);
+                    return new ServiceResponse<TokenResponse>("Account is inactive. Please contact support.");
+                }
+
+                // Generate tokens
                 var tokenGenerator = new JwtTokenGenerator(_configuration);
                 var accessToken = tokenGenerator.GenerateAccessToken(user);
                 var refreshToken = tokenGenerator.GenerateRefreshToken();
 
+                _logger.LogInformation("Tokens generated for user: {EmailOrUsername}", request.EmailOrUsername);
 
-
-                // Create login response
-                var loginResponse = new LoginResponse
+                // Prepare response
+                var tokenResponse = new TokenResponse
                 {
                     AccessToken = accessToken,
-                    RefreshToken = refreshToken,
-                    UserId = user.Id,
-                    Username = user.Username,
-                    Email = user.Email,
-                    Role = user.RoleId.ToString()
+                    RefreshToken = refreshToken
                 };
 
-                return new ServiceResponse<LoginResponse>(loginResponse, "Login successful.");
+                return new ServiceResponse<TokenResponse>(tokenResponse, "Sign-in successful.");
             }
             catch (Exception ex)
             {
-                return new ServiceResponse<LoginResponse>($"An error occurred during login: {ex.Message}");
+                _logger.LogError(ex, "Error during SignInAsync for email/username: {EmailOrUsername}", request.EmailOrUsername);
+                return new ServiceResponse<TokenResponse>("An error occurred during sign-in.");
             }
         }
 
 
-        // Helper function to hash password
+
+
+
+        // Utility method for password hashing
         private string HashPassword(string password)
         {
-            using (var sha256 = SHA256.Create())
+            _logger.LogInformation("Hashing password.");
+            try
             {
-                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(bytes);
+                using var sha256 = System.Security.Cryptography.SHA256.Create();
+                var bytes = System.Text.Encoding.UTF8.GetBytes(password);
+                var hash = sha256.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while hashing password.");
+                throw;
             }
         }
-
-
-
-
-
-
-
-
-
-
     }
 }
