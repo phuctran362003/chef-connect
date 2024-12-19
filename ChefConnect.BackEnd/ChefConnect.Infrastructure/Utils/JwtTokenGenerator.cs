@@ -20,12 +20,12 @@ namespace ChefConnect.Infrastructure.Utils
         {
             var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]);
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.RoleId.ToString()),
-                new Claim("UserId", user.Id.ToString())
-            };
+    {
+        new Claim(ClaimTypes.Name, user.Username),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.Role, GetRoleNameById(user.RoleId)), // Add Role name directly
+        new Claim("UserId", user.Id.ToString())
+    };
 
             if (additionalClaims != null)
                 claims.AddRange(additionalClaims);
@@ -43,6 +43,19 @@ namespace ChefConnect.Infrastructure.Utils
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        private string GetRoleNameById(int roleId)
+        {
+            return roleId switch
+            {
+                1 => "Admin",
+                2 => "Chef",
+                3 => "Customer",
+                _ => "Unknown"
+            };
+        }
+
+
 
         public string GenerateRefreshToken()
         {

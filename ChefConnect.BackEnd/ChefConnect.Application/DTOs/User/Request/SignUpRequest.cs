@@ -14,6 +14,7 @@ namespace ChefConnect.Application.DTOs.User.Request
         [Required(ErrorMessage = "Password is required.")]
         [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
             ErrorMessage = "Password must be at least 8 characters long, contain at least one letter, one number, and one special character.")]
+
         public string Password { get; set; }
     }
 
