@@ -18,27 +18,38 @@ namespace ChefConnect.Infrastructure.Utils
 
         public string GenerateAccessToken(User user, IEnumerable<Claim> additionalClaims = null)
         {
-            var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]);
+            // Retrieve the secret key from the configuration
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]);
+
+            // Create default claims for the user
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, user.Username),
-        new Claim(ClaimTypes.Email, user.Email),
-        new Claim(ClaimTypes.Role, GetRoleNameById(user.RoleId)), // Add Role name directly
-        new Claim("UserId", user.Id.ToString())
-    };
+        {
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, GetRoleNameById(user.RoleId)),
+            new Claim("UserId", user.Id.ToString())
+        };
 
+            // Add any additional claims provided
             if (additionalClaims != null)
+            {
                 claims.AddRange(additionalClaims);
+            }
 
+            // Define token properties
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(15), // Access token expiry (15 mins)
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                Issuer = _configuration["JwtSettings:Issuer"],
-                Audience = _configuration["JwtSettings:Audience"]
+                Expires = DateTime.UtcNow.AddMinutes(15), // Access token expiry (15 minutes)
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature
+                ),
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"]
             };
 
+            // Generate the token
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
@@ -55,11 +66,11 @@ namespace ChefConnect.Infrastructure.Utils
             };
         }
 
-
-
         public string GenerateRefreshToken()
         {
+            // Generate a refresh token using a Guid
             return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
         }
     }
+
 }

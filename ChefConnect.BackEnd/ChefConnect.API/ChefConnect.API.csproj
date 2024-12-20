@@ -18,4 +18,10 @@
     <ProjectReference Include="..\ChefConnect.Application\ChefConnect.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

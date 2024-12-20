@@ -6,7 +6,7 @@ namespace ChefConnect.Infrastructure.Interfaces
     {
         Task<User> CreateUserAsync(User newUser);
         Task<User> GetUserByEmailAndPasswordAsync(string email, string hashedPassword);
-        Task<User> GetUserByEmailOrUsernameAsync(string emailOrUsername, string hashedPassword);
+        Task<User> GetUserByEmailOrUsernameAsync(string emailOrUsername);
         Task<User> GetUserByEmailAsync(string email);
 
 

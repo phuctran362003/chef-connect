@@ -203,8 +203,9 @@ namespace ChefConnect.API.Startup
 
             #region Repositories
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
             services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<JwtTokenGenerator>();
 
 
             #endregion
